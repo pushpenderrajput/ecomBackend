@@ -1,28 +1,44 @@
 package com.pushpender.ecombackend.services;
 
+import com.pushpender.ecombackend.DTO.UserDTO.UserRequestDto;
+import com.pushpender.ecombackend.DTO.UserDTO.UserResponseDto;
 import com.pushpender.ecombackend.entities.User;
 import com.pushpender.ecombackend.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     @Autowired
     private UserRepository repo;
 
 //    GET all Users
-    public List<User> getUsers(){
-        return (List<User>) repo.findAll();
+    public List<UserResponseDto> getUsers(){
+        return repo.findAll().stream()
+                .map(u->new UserResponseDto(u.getName(),u.getEmail()))
+                .collect(Collectors.toList());
     }
 //    Create User
-    public void saveUser(User user){
+    public void saveUser(UserRequestDto dto){
+        if(repo.existsByEmail(dto.getEmail())){
+            throw new RuntimeException("Email Already Registered!");
+        }
+        User user = new User();
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
         repo.save(user);
     }
 //  GET User by Id
-    public User getUserById(Long id){
-        return repo.findById(id).orElse(new User());
+    public  UserResponseDto getUserById(Long id){
+        return repo.findById(id)
+                .map(u->new UserResponseDto(u.getName(),u.getEmail()))
+                .orElse(null);
     }
 
 //    Update User
