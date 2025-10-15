@@ -42,12 +42,16 @@ public class UserService {
     }
 
 //    Update User
-    public void editUser(User user, Long id){
-        User user1 = repo.findById(id).orElse(null);
-//        assert user1 != null;
-        if(user1.getId().equals(id)){
-            repo.save(user);
+    public void editUser(UserRequestDto dto, Long id){
+        var user = repo.findById(id).orElse(null);
+        if(user == null){
+            throw new RuntimeException("User not Found");
         }
+        user.setName(dto.getName());
+        user.setPassword(dto.getPassword());
+        user.setEmail(dto.getEmail());
+        repo.save(user);
+
 
     }
 
