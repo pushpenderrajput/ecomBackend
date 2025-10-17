@@ -22,5 +22,8 @@ public class ProductRequestDto {
     @NotNull
     private BigDecimal price;
 
+    @NotNull
+    private Byte category;
+
 
 }
