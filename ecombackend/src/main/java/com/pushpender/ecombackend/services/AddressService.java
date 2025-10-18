@@ -56,9 +56,9 @@ public class AddressService {
 
     public void deleteAddress(Long id){
         var add = addRepo.findById(id).orElse(null);
-//        if(add == null){
-//
-//        }
+        if(add == null){
+            throw new RuntimeException("Address not Found");
+        }
         addRepo.deleteById(id);
     }
 
