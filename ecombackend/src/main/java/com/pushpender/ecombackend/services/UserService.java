@@ -1,13 +1,17 @@
 package com.pushpender.ecombackend.services;
 
+import com.pushpender.ecombackend.DTO.OrderDTO.OrderByUserDto;
+import com.pushpender.ecombackend.DTO.OrderDTO.OrderResponseDto;
 import com.pushpender.ecombackend.DTO.UserDTO.UserRequestDto;
 import com.pushpender.ecombackend.DTO.UserDTO.UserResponseDto;
 import com.pushpender.ecombackend.entities.User;
+import com.pushpender.ecombackend.repositories.OrderRepository;
 import com.pushpender.ecombackend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +20,8 @@ import java.util.stream.Collectors;
 public class UserService {
     @Autowired
     private UserRepository repo;
-
+    @Autowired
+    private OrderRepository orderRepo;
 //    GET all Users
     public List<UserResponseDto> getUsers(){
         return repo.findAll().stream()
@@ -63,5 +68,23 @@ public class UserService {
 
         }
         repo.deleteById(id);
+    }
+
+    public List<OrderByUserDto> getOrders(Long userId){
+        var orders = orderRepo.findByUserId(userId);
+
+
+        return orders.stream()
+                .map(order-> {
+                            OrderByUserDto resOrder = new OrderByUserDto();
+                            resOrder.setOrderId(order.getId());
+                            resOrder.setStatus(order.getStatus());
+                            resOrder.setDate(order.getOrderDate());
+                            resOrder.setTotal(order.getTotalAmount());
+                            return resOrder;
+                        }
+
+
+                ).toList();
     }
 }

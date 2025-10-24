@@ -1,5 +1,7 @@
 package com.pushpender.ecombackend.controllers;
 
+import com.pushpender.ecombackend.DTO.OrderDTO.OrderByUserDto;
+import com.pushpender.ecombackend.DTO.OrderDTO.OrderResponseDto;
 import com.pushpender.ecombackend.DTO.UserDTO.UserRequestDto;
 import com.pushpender.ecombackend.DTO.UserDTO.UserResponseDto;
 import com.pushpender.ecombackend.services.UserService;
@@ -46,5 +48,10 @@ public class UserController {
     @DeleteMapping("{id}")
     public void deleteUser(@PathVariable Long id){
         service.deleteUser(id);
+    }
+
+    @GetMapping("{userId}/orders")
+    public List<OrderByUserDto> getOrders(@PathVariable Long userId){
+        return service.getOrders(userId);
     }
 }
