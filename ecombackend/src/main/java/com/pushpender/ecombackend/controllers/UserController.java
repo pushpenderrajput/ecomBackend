@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserService service;
 //    Get All Users
-    @GetMapping
+    @GetMapping("/users")
     public List<UserResponseDto> getAllUsers(){
         return service.getUsers();
     }
 
 //    Get User By Id
-    @GetMapping("{id}")
+    @GetMapping("/users{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id){
         var user = service.getUserById(id);
         if(user == null){
@@ -33,24 +33,24 @@ public class UserController {
         return  ResponseEntity.ok(user);
     }
 //    Save a User
-    @PostMapping
+    @PostMapping("/users")
     public void saveUser(@Valid @RequestBody UserRequestDto dto){
         service.saveUser(dto);
 
     }
 //   Update User
-    @PutMapping("{id}")
+    @PutMapping("users/{id}")
     public void editUser(@RequestBody UserRequestDto dto, @PathVariable Long id){
         service.editUser(dto,id);
     }
 
 //    Delete User
-    @DeleteMapping("{id}")
+    @DeleteMapping("users/{id}")
     public void deleteUser(@PathVariable Long id){
         service.deleteUser(id);
     }
 
-    @GetMapping("{userId}/orders")
+    @GetMapping("users/{userId}/orders")
     public List<OrderByUserDto> getOrders(@PathVariable Long userId){
         return service.getOrders(userId);
     }

@@ -1,5 +1,6 @@
 package com.pushpender.ecombackend.DTO.UserDTO;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,4 +17,6 @@ public class UserRequestDto {
     private String email;
     @Size(min = 8,message = "Password must be larger than 8 Characters.")
     private String password;
+
+   private String role;
 }

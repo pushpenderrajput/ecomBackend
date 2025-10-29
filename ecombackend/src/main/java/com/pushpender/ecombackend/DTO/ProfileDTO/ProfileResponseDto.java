@@ -17,6 +17,7 @@ public class ProfileResponseDto {
     private String phoneNumber;
     private LocalDate dateOfBirth;
     private Integer loyaltyPoints;
+    private String role;
     private UserResponseDto user;
 
 

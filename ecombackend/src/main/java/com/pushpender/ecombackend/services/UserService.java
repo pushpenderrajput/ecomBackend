@@ -9,9 +9,9 @@ import com.pushpender.ecombackend.repositories.OrderRepository;
 import com.pushpender.ecombackend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +22,9 @@ public class UserService {
     private UserRepository repo;
     @Autowired
     private OrderRepository orderRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 //    GET all Users
     public List<UserResponseDto> getUsers(){
         return repo.findAll().stream()
@@ -36,7 +39,15 @@ public class UserService {
         User user = new User();
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        String hashedPassword = passwordEncoder.encode(dto.getPassword());
+        user.setPassword(hashedPassword);
+        user.setRole(dto.getRole());
+        if(dto.getRole() == null || dto.getRole().isBlank()){
+            user.setRole("USER");
+        }else{
+            user.setRole(dto.getRole());
+        }
+
         repo.save(user);
     }
 //  GET User by Id
@@ -53,8 +64,18 @@ public class UserService {
             throw new RuntimeException("User not Found");
         }
         user.setName(dto.getName());
-        user.setPassword(dto.getPassword());
+        String hashedPassword = passwordEncoder.encode(dto.getPassword());
+        user.setPassword(hashedPassword);
         user.setEmail(dto.getEmail());
+        if(dto.getRole() == null || dto.getRole().isBlank()){
+            if(user.getRole() == null || user.getRole().isBlank()){
+                user.setRole("USER");
+            }
+
+        }else{
+            user.setRole(dto.getRole());
+        }
+
         repo.save(user);
 
 

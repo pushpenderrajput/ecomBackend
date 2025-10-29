@@ -23,7 +23,7 @@ public class ProfileService {
         }
         var user = profile.getUser();
         var userDto = new UserResponseDto(user.getName(),user.getEmail());
-        return new ProfileResponseDto(profile.getBio(),profile.getPhoneNumber(),profile.getDateOfBirth(),profile.getLoyaltyPoints(),userDto);
+        return new ProfileResponseDto(profile.getBio(),profile.getPhoneNumber(),profile.getDateOfBirth(),profile.getLoyaltyPoints(),user.getRole(),userDto);
     }
     public void saveProfile(ProfileRequestDto profile, Long id){
         var user = userRepo.findById(id).orElse(null);
